@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Welcome</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+  height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url("https://i.pinimg.com/1200x/48/69/bd/4869bdb2a1ff2c8aa55930ff0faf85c4.jpg");
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Card */
+.card{
+  background:#fff;
+  width:360px;
+  padding:30px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(0.95);}
+  to{opacity:1; transform:scale(1);}
+}
+
+/* Car Image */
+.card img{
+  width:200px;
+  margin-bottom:20px;
+}
+
+/* Text */
+h2{
+  font-size:22px;
+  margin-bottom:8px;
+}
+
+p{
+  font-size:14px;
+  color:#555;
+  margin-bottom:25px;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+}
+
+button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.btn-in{
+  background:#d32f2f;
+  color:#fff;
+}
+
+.btn-not{
+  background:#ccc;
+}
+
+/* Thank you page */
+.thankyou{
+  display:none;
+}
+
+.thankyou h2{
+  color:#2e7d32;
+}
+
+.thankyou p{
+  font-size:15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Welcome Page -->
+<div class="card" id="welcome">
+  <img src="https://i.pinimg.com/1200x/db/85/85/db8585a27a882b9fee3a47b234b8bf53.jpg" alt=" Car" class="car-img">
+  <h2>Welcome to My Perfect Car </h2>
+  <p>Find your perfect car</p>
+
+  <div class="buttons">
+    <button class="btn-in" onclick="goHome()">I'm In</button>
+    <button class="btn-in" onclick="showThankYou()">Not Now</button>
+  </div>
+</div>
+
+<!-- Thank You Page -->
+<div class="card thankyou" id="thankyou">
+  <img src="https://cdn-icons-png.flaticon.com/512/3159/3159066.png" alt="Thank You">
+  <h2>Thank You!</h2>
+  <p>Visit again — we’re always happy to help you find your dream car 🚗</p>
+</div>
+
+<script>
+function goHome() {
+    window.location.href = "login.html";
+}
+function showThankYou(){
+  document.getElementById("welcome").style.display="none";
+  document.getElementById("thankyou").style.display="block";
+}
+</script>
+
+</body>
+</html>
