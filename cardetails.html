@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Perfect Car - Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+ 
+  body {
+    background: url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1350&q=80")
+      center/cover no-repeat fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: #00334e;
+  }
+
+  header h1 {
+    font-family: "Playfair Display", serif;
+    color: #ffffff;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .car-details {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    text-align: center;
+  }
+
+  .car-details img {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 20px;
+  }
+
+  .car-info {
+    text-align: left;
+    margin-top: 10px;
+    color: #00334e;
+  }
+
+  .car-info p {
+    margin: 8px 0;
+    font-size: 16px;
+  }
+
+  .car-info span {
+    font-weight: 600;
+    color: #005b96;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    background: #00b894;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #009d7a;
+  }
+</style>
+
+</head>
+<body>
+
+<header>
+  <h1>My Perfect Car - Details</h1>
+</header>
+
+<div class="car-details">
+  <img id="carImage" src="" alt="Car Image">
+  <div class="car-info">
+    <p><span>Brand:</span> <span id="carBrand"></span></p>
+    <p><span>Model:</span> <span id="carModel"></span></p>
+    <p><span>Price Range:</span> ₹<span id="carMinPrice"></span> - ₹<span id="carMaxPrice"></span></p>
+    <p><span>Selected Max Price:</span> ₹<span id="carSelectedPrice"></span></p>
+    <p><span>Fuel Type:</span> <span id="carFuel"></span></p>
+    <p><span>Color:</span> <span id="carColor"></span></p>
+   
+  </div>
+  <button onclick="goBack()">← Back to Home</button>
+</div>
+
+<script>
+  const carImages = {
+    "Fortuner": {
+      "White": "https://i.pinimg.com/1200x/c0/c2/66/c0c266c64f350e3167ecb894a5bc33be.jpg",
+      "Black": "https://i.pinimg.com/1200x/ad/2c/65/ad2c65e9a73330d68cd0bf1d2c358c9e.jpg",
+      "Silver": "https://i.pinimg.com/736x/71/21/f7/7121f7e51a100fde7004f8cc7ec99c35.jpg"
+    },
+    "Innova Crysta": {
+      "White": "https://i.pinimg.com/736x/77/b1/35/77b1352892d9732cff5ab4a2e86c2cad.jpg",
+      "Grey": "https://i.pinimg.com/736x/33/e8/f6/33e8f6c18ca6fe2e1b67baa859e04b15.jpg",
+      "Silver": "https://i.pinimg.com/1200x/fe/e6/ee/fee6eea7b191112a744e2bf23a277871.jpg"
+    },
+    "Glanza": {
+      "Blue": "https://i.pinimg.com/736x/85/02/f6/8502f6edf064f49cde52ccaf8eeb8bec.jpg",
+      "Red": "https://i.pinimg.com/1200x/fc/a9/7b/fca97ba001e3f99b776dcce3444a6669.jpg",
+      "White": "https://i.pinimg.com/736x/1a/d8/98/1ad8989c982b1ea48d1ac459da8c7609.jpg"
+    },
+    "Hyryder": {
+      "Blue": "https://i.pinimg.com/736x/79/2a/5e/792a5efba8f857e2029282335f808b2b.jpg",
+      "Grey": "https://imgd.aeplcdn.com/370x208/n/7z4vcva_1596596.jpg?q=80"
+    },
+    "Camry": {
+      "White": "https://i.pinimg.com/736x/0f/81/64/0f8164ae62b6debbc589433070497c1b.jpg",
+      "Black": "https://i.pinimg.com/1200x/d2/6d/e5/d26de591917a1c368055c9eb2d579373.jpg"
+    },
+
+    "3 Series": {
+      "Blue": "https://i.pinimg.com/1200x/df/bb/5e/dfbb5e0a6d0f4ebf649130ab4d27a090.jpg",
+      "White": "https://i.pinimg.com/736x/55/da/27/55da272546d7b7ddc7e19001c6584dfe.jpg",
+      "Black": "https://i.pinimg.com/1200x/d9/bf/54/d9bf54d2a986c2ace6b4bef4779d06b8.jpg"
+    },
+
+    "5 Series": {
+      "Black": "https://i.pinimg.com/1200x/d9/bf/54/d9bf54d2a986c2ace6b4bef4779d06b8.jpg",
+      "Grey": "https://i.pinimg.com/1200x/18/ee/a0/18eea007c1f7afd3e19c696e1be107f9.jpg",
+      "White": "https://i.pinimg.com/736x/e5/ac/a0/e5aca01399c8a6ebd70129c9bf34fda8.jpg"
+    },
+
+    "X1": {
+      "White": "https://i.pinimg.com/1200x/9b/28/d2/9b28d27b43bcf35afc7dfa6bcc370d23.jpg",
+      "Grey": "https://i.pinimg.com/1200x/5f/c9/38/5fc938dd1d7435d92d51a345e9c84683.jpg",
+      "Blue": "https://i.pinimg.com/1200x/74/e9/cb/74e9cbaa63aa406fa4786871097ba65d.jpg"
+    },
+
+    "X5": {
+      "Black": "https://i.pinimg.com/736x/be/9f/3f/be9f3f51514d122ff56dbbab42b20231.jpg",
+      "White": "https://i.pinimg.com/1200x/eb/69/cd/eb69cda9dc03596673a6d6b3decf6cb2.jpg",
+      "Silver": "https://i.pinimg.com/1200x/6b/68/6e/6b686e4dd542bc5e6ff0013cb019825b.jpg"
+    },
+
+    "iX (Electric)": {
+      "Red": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTckCwHkW9V2yPf8OheGGdtOOMjPpEroPBfMA&s",
+      "White": "https://stimg.cardekho.com/images/car-images/930x620/BMW/iX/11610/1714376264596/221_Mineral-White_0d0d0d.jpg?tr=w-420"
+    },
+
+    "A4": {
+      "White": "https://i.pinimg.com/1200x/25/b2/44/25b24477f6a33eb9caeb57f7e0822511.jpg",
+      "Blue": "https://i.pinimg.com/736x/2b/5e/b1/2b5eb1643d03f3456be624f26c712fc7.jpg",
+      "Black": "https://i.pinimg.com/1200x/3b/83/8b/3b838b7c0b8616fbaecf4b588c09c948.jpg"
+    },
+
+    "Q3": {
+      "Orange": "https://imgd.aeplcdn.com/664x374/n/cw/ec/28379/q3-exterior-right-front-three-quarter-93481.jpeg?isig=0&q=80",
+      "White": "https://i.pinimg.com/736x/2d/33/e0/2d33e0f63d767251a0fe112b4ac809bb.jpg"
+    },
+
+    "Q5": {
+      "Silver": "https://i.pinimg.com/1200x/c2/dc/91/c2dc915d48743204ee9b288a817f4fd3.jpg",
+      "Black": "https://i.pinimg.com/736x/d9/11/6d/d9116d72da52477200d59268718b9738.jpg",
+      "White": "https://i.pinimg.com/1200x/09/b6/aa/09b6aab8945c5fc86d69163971827fa9.jpg"
+    },
+
+    "A6": {
+      "Black": "https://i.pinimg.com/1200x/38/a7/48/38a74824a86d7beeaeb502c700efcb37.jpg",
+      "Grey": "https://i.pinimg.com/1200x/cc/55/73/cc5573f2a40fcb2bce76ffb0bab4fa22.jpg"
+    },
+
+    "e-tron (Electric)": {
+      "Grey": "https://i.pinimg.com/1200x/da/64/bf/da64bf97d12977c0c30aba5a3e171a50.jpg",
+      "Blue": "https://i.pinimg.com/1200x/e0/ae/c9/e0aec9fd247728af2a876d6e0e86e5ca.jpg",
+      "White": "https://i.pinimg.com/1200x/0a/80/37/0a8037a83c0cf081baa08aa8673f5b04.jpg"
+    },
+
+    "C-Class": {
+      "White": "https://i.pinimg.com/736x/ab/4d/f7/ab4df7a8d0ab0e3cd90c47cc1f148d0b.jpg",
+      "Silver": "https://i.pinimg.com/1200x/c9/77/51/c97751719d4167f107bf78e4b7b01440.jpg",
+      "Black": "https://i.pinimg.com/1200x/c0/ec/01/c0ec01e25e19bfc19275746545d2215b.jpg"
+    },
+
+    "E-Class": {
+      "Black": "https://i.pinimg.com/736x/17/c4/0e/17c40e77f49c78011edf9acd71d76b7a.jpg",
+      "Blue": "https://i.pinimg.com/1200x/48/69/bd/4869bdb2a1ff2c8aa55930ff0faf85c4.jpg"
+    },
+
+    "GLC": {
+      "White": "https://i.pinimg.com/736x/a6/e6/44/a6e64411a5323860152631c43d841116.jpg",
+      "Grey": "https://i.pinimg.com/736x/7f/a3/28/7fa328a4f7d4686fc9478ac5291f2d7c.jpg"
+    },
+
+    "GLE": {
+      "Black": "https://i.pinimg.com/1200x/34/04/63/34046343a259b194446033116d2ddfa2.jpg",
+      "White": "https://i.pinimg.com/1200x/0d/97/00/0d970034d341e3790caeb90981527f65.jpg"
+    },
+
+    "S-Class": {
+      "Black": "https://i.pinimg.com/1200x/db/85/85/db8585a27a882b9fee3a47b234b8bf53.jpg",
+      "White": "https://i.pinimg.com/736x/a8/97/c4/a897c402ed03c492b7eec92de56258c2.jpg"
+    },
+
+    "Model S": {
+      "White": "https://i.pinimg.com/736x/27/c9/59/27c959dc21a998ff5249935ff0754aee.jpg",
+      "Black": "https://i.pinimg.com/736x/65/39/1c/65391c5cb726ee184bf06ff4ddbef303.jpg",
+      "Red": "https://i.pinimg.com/1200x/db/93/d6/db93d623008d44966ab832dab8b59c5b.jpg"
+    },
+
+    "Model 3": {
+      "Blue": "https://imgd.aeplcdn.com/1056x594/n/lnk9cva_1595893.jpg?q=80",
+      "Black": "https://imgd.aeplcdn.com/370x208/n/gkq9cva_1595901.jpg?q=80",
+      "White": "https://imgd.aeplcdn.com/664x374/n/kqn9cva_1595897.jpg?q=80"
+    },
+
+    "Model X": {
+      "Black": "https://stimg.cardekho.com/images/carexteriorimages/930x620/Tesla/Model-X/5253/1752498950241/front-left-side-47.jpg",
+      "White": "https://static0.topspeedimages.com/wordpress/wp-content/uploads/2024/04/2022-tesla-model-x-plaid.jpg"
+    },
+
+    "Model Y": {
+      "Red": "https://imgd.aeplcdn.com/1600x900/n/cw/ec/206884/model-y-exterior-left-front-three-quarter.jpeg?isig=0&q=75",
+      "Blue": "https://imgd-ct.aeplcdn.com/664x415/n/vbdtogb_1852954.jpg?q=80",
+      "White": "https://stimg.cardekho.com/images/carexteriorimages/930x620/Tesla/Model-Y/6390/1753873275226/front-left-side-47.jpg"
+    },
+
+    "Creta": {
+      "White": "https://i.pinimg.com/736x/e0/ae/37/e0ae37ccddc1a705e9dbaa6bbe37a1ea.jpg",
+      "Black": "https://i.pinimg.com/736x/85/77/5c/85775cfd65c6f5e1a31b42bbdabd7b3b.jpg",
+      "Red": "https://i.pinimg.com/736x/6a/67/07/6a670726ccf532d0b7f8c0e20bb14ebd.jpg"
+    },
+
+    "Venue": {
+      "Blue": "https://i.pinimg.com/736x/28/3c/68/283c68902426262896cb1786bc8b5771.jpg",
+      "White": "https://i.pinimg.com/1200x/95/60/2a/95602a3cf9ee07f549006428a227e5f2.jpg"
+    },
+
+    "i20": {
+      "Red": "https://i.pinimg.com/1200x/a7/42/e5/a742e5eb88b52a11da3bdfe2fd56db50.jpg",
+      "White": "https://i.pinimg.com/736x/19/d2/24/19d2246b02d6d9f388246402eb3e89b4.jpg"
+    },
+
+    "Verna": {
+      "Black": "https://i.pinimg.com/1200x/58/9c/ef/589cef8652ba7e5c129900dfdb62ccd1.jpg",
+      "White": "https://i.pinimg.com/1200x/86/98/e6/8698e6c6ec060039b339dda4739581a6.jpg"
+    },
+
+    "Tucson": {
+      "Grey": "https://i.pinimg.com/1200x/d8/e5/05/d8e505f5133819e86200fba2c37ed743.jpg",
+      "White": "https://i.pinimg.com/736x/e7/26/82/e72682e85597dc7594af1daabe90d0a6.jpg"
+    },
+
+    "Swift": {
+      "Red": "https://i.pinimg.com/736x/04/80/9e/04809e077994bdded73624ceddb5f9b6.jpg",
+      "White": "https://i.pinimg.com/1200x/c6/ab/44/c6ab4480ad1c65f84fea1dba875d34dc.jpg"
+    },
+
+    "Baleno": {
+      "Blue": "https://i.pinimg.com/736x/34/c1/74/34c1743aee387e9896b3691413f63a4e.jpg",
+      "Grey": "https://i.pinimg.com/1200x/bc/a5/bd/bca5bd2dd7ea9ac809724703610da7bc.jpg"
+    },
+
+    "Brezza": {
+      "White": "https://i.pinimg.com/736x/ee/11/32/ee1132b248589845617e892a9e5e1dd1.jpg",
+      "Silver": "https://stimg.cardekho.com/images/car-images/930x620/Maruti/Brezza/10387/1760431933616/Splendid-Silver_747d86.jpg?tr=w-420"
+    },
+
+    "Ertiga": {
+      "White": "https://i.pinimg.com/736x/89/32/c0/8932c0e6bacc17f73c4d64aa6aa4ff5b.jpg",
+      "Grey": "https://i.pinimg.com/736x/13/71/f7/1371f7b009561a2f85ac3688927136a9.jpg"
+    },
+
+    "Dzire": {
+      "Brown": "https://www.v3cars.com/media/model-imgs/410909nutmeg-brown.webp",
+      "White": "https://ackodrive-prod.ackoassets.com/image/maruti-suzuki/dzire/arctic-white/images_cdn/small/Transparent.webp"
+    },
+
+    "Nexon": {
+      "Blue": "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202202/Tata_Nexon_3_lakh_units.jpg?size=1200:675",
+      "Grey": "https://imgd.aeplcdn.com/664x374/n/p7uambb_1688457.jpg?q=80",
+      "White": "https://imgd.aeplcdn.com/664x374/n/hfcbmbb_1688463.jpg?q=80"
+    },
+
+    "Harrier": {
+      "Black": "https://i.pinimg.com/1200x/36/a8/96/36a89693fafa8af95f45408d446a3859.jpg",
+      "White": "https://i.pinimg.com/1200x/f7/f3/d9/f7f3d9dcf43edd4e25536f3487f0ce69.jpg"
+    },
+
+    "Safari": {
+      "White": "https://i.pinimg.com/736x/f3/14/7b/f3147b292629643c08532fd5b090dd89.jpg",
+      "Blue": "https://i.pinimg.com/1200x/70/c7/24/70c724d0a556e190f638fc5db794f817.jpg"
+    },
+
+    "Altroz": {
+      "Gold": "https://images.livemint.com/img/2022/08/22/600x338/altroz-gallery-desktop-banner-overlay_1661163872077_1661163881561_1661163881561.jpg",
+      "White": "https://m.media-amazon.com/images/I/61KScAYbdjL._AC_UF1000,1000_QL80_.jpg"
+    },
+
+    "Punch": {
+      "Brown": "https://stimg2.cardekho.com/images/carNewsEditorImages/930x620/20211004_160126/27887/tata0.jpg",
+      "White": "https://i.pinimg.com/736x/f9/2a/76/f92a76272fe62d0163e66c36011f5564.jpg"
+    }
+  };
+
+  const car = JSON.parse(localStorage.getItem("selectedCar"));
+
+  if(car){
+    document.getElementById("carBrand").textContent = car.brand;
+    document.getElementById("carModel").textContent = car.model;
+    document.getElementById("carMinPrice").textContent = car.minPrice.toLocaleString();
+    document.getElementById("carMaxPrice").textContent = car.maxPrice.toLocaleString();
+    document.getElementById("carSelectedPrice").textContent = car.selectedMaxPrice.toLocaleString();
+    document.getElementById("carFuel").textContent = car.fuel || "-";
+    document.getElementById("carColor").textContent = car.color || "-";
+
+    let img = "https://via.placeholder.com/700x350?text=No+Image";
+
+    if (carImages[car.model] && carImages[car.model][car.color]) {
+      img = carImages[car.model][car.color];
+    }
+
+    document.getElementById("carImage").src = img;
+
+  } else {
+    alert("No car selected! Redirecting to Home page.");
+    window.location.href = "home.html";
+  }
+
+  function goBack(){
+    window.location.href = "home.html";
+  }
+</script>
+
+</body>
+</html>
+
+
+
+
