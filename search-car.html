@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Perfect Car - Filters</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+    body{height:100vh;background:linear-gradient(135deg,#d6f0ff,#f0fbff);display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;color:#00334e;}
+    body::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,0.7),rgba(240,250,255,0.8)),url("https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1600&q=80");background-size:cover;background-position:center;filter:brightness(95%) saturate(110%);z-index:-1;}
+    header{position:absolute;top:30px;text-align:center;animation:fadeInDown 1s ease forwards;}
+    header h1{font-family:"Playfair Display",serif;color:#005b96;font-size:38px;text-shadow:1px 1px 6px rgba(255,255,255,0.7);}
+    .filter-box{background:rgba(255,255,255,0.75);backdrop-filter:blur(10px);box-shadow:0 0 25px rgba(0,85,170,0.25);border-radius:18px;padding:40px 50px;width:90%;max-width:700px;opacity:0;transform:translateY(60px);animation:slideUpFade 1.5s ease forwards .5s;}
+    .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+    select,input[type=range]{width:100%;padding:10px;border:none;border-radius:8px;background:#fff;font-size:15px;color:#00334e;box-shadow:0 0 5px rgba(0,0,0,0.1);}
+    button{margin-top:25px;padding:12px 25px;width:100%;border:none;border-radius:10px;background:#00b894;color:#fff;font-weight:600;font-size:16px;cursor:pointer;}
+    button:hover{background:#009d7a}
+    @keyframes slideUpFade{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+    .range-value{margin-top:6px;font-size:14px;color:#065f46}
+  </style>
+</head>
+<body>
+
+  <header><h1>My Perfect Car</h1></header>
+
+  <div class="filter-box">
+    <h2 style="text-align:center;color:#00b894;margin-bottom:20px;">Search Your Perfect Match</h2>
+
+    <div class="filters">
+
+      <div>
+        <label>Brand</label>
+        <select id="brand">
+          <option value="">Select Brand</option>
+          <option>Toyota</option>
+          <option>BMW</option>
+          <option>Audi</option>
+          <option>Mercedes-Benz</option>
+          <option>Tesla</option>
+          <option>Hyundai</option>
+          <option>Maruti Suzuki</option>
+          <option>Tata Motors</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Model</label>
+        <select id="model"><option value="">Select Model</option></select>
+      </div>
+
+      <div>
+        <label>Price Range (₹)</label>
+        <input type="range" id="price" min="0" max="0" value="0" step="1">
+        <div class="range-value">Select a model</div>
+      </div>
+
+      <div>
+        <label>Body Type</label>
+        <select id="bodytype">
+          <option value="">Select Body Type</option>
+          <option>SUV</option><option>Sedan</option><option>Hatchback</option><option>Coupe</option><option>Convertible</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Fuel Type</label>
+        <select id="fuel"><option value="">Select Fuel Type</option></select>
+      </div>
+
+      <div>
+        <label>Color</label>
+        <select id="color"><option value="">Select Color</option></select>
+      </div>
+
+    </div>
+
+    <button id="searchBtn">Search Cars</button>
+  </div>
+
+<script>
+/* ---------- Data (unchanged except colors) ---------- */
+const brandModels = {
+  "Toyota":["Fortuner","Innova Crysta","Glanza","Hyryder","Camry"],
+  "BMW":["3 Series","5 Series","X1","X5","iX (Electric)"],
+  "Audi":["A4","Q3","Q5","A6","e-tron (Electric)"],
+  "Mercedes-Benz":["C-Class","E-Class","GLC","GLE","S-Class"],
+  "Tesla":["Model S","Model 3","Model X","Model Y"],
+  "Hyundai":["Creta","Venue","i20","Verna","Tucson"],
+  "Maruti Suzuki":["Swift","Baleno","Brezza","Ertiga","Dzire"],
+  "Tata Motors":["Nexon","Harrier","Safari","Altroz","Punch"]
+};
+
+const fuelTypes = {
+  "Fortuner":["Diesel","Petrol"], "Innova Crysta":["Diesel","Petrol"], "Glanza":["Petrol","CNG"], "Hyryder":["Petrol","Hybrid"], "Camry":["Hybrid"],
+  "3 Series":["Petrol","Diesel"], "5 Series":["Petrol","Diesel"], "X1":["Petrol","Diesel"], "X5":["Petrol","Diesel"], "iX (Electric)":["Electric"],
+  "A4":["Petrol"], "Q3":["Petrol"], "Q5":["Petrol"], "A6":["Petrol"], "e-tron (Electric)":["Electric"],
+  "C-Class":["Petrol","Diesel"], "E-Class":["Petrol","Diesel"], "GLC":["Petrol","Diesel"], "GLE":["Petrol","Diesel"], "S-Class":["Petrol"],
+  "Model S":["Electric"], "Model 3":["Electric"], "Model X":["Electric"], "Model Y":["Electric"],
+  "Creta":["Petrol","Diesel"], "Venue":["Petrol","Diesel"], "i20":["Petrol"], "Verna":["Petrol"], "Tucson":["Petrol","Diesel"],
+  "Swift":["Petrol","CNG"], "Baleno":["Petrol","CNG"], "Brezza":["Petrol","CNG"], "Ertiga":["Petrol","CNG"], "Dzire":["Petrol","CNG"],
+  "Nexon":["Petrol","Diesel","Electric"], "Harrier":["Diesel"], "Safari":["Diesel"], "Altroz":["Petrol","Diesel","CNG"], "Punch":["Petrol","CNG"]
+};
+
+const colors = {
+  "Fortuner":["White","Black","Silver"], "Innova Crysta":["White","Grey","Silver"], "Glanza":["Blue","Red","White"],
+  "Hyryder":["Green","Blue","Grey"], "Camry":["White","Black"],
+  "3 Series":["Blue","White","Black"], "5 Series":["Black","Grey","White"], "X1":["White","Grey","Blue"], "X5":["Black","White","Silver"], "iX (Electric)":["Red","White"],
+  "A4":["White","Blue","Black"], "Q3":["Orange","White"], "Q5":["Silver","Black","White"], "A6":["Black","Grey"], "e-tron (Electric)":["Grey","Blue","White"],
+  "C-Class":["White","Silver","Black"], "E-Class":["Black","Blue"], "GLC":["White","Grey"], "GLE":["Black","White"], "S-Class":["Black","White"],
+  "Model S":["White","Black","Red"], "Model 3":["Blue","Black","White"], "Model X":["Black","White"], "Model Y":["Red","Blue","White"],
+  "Creta":["White","Black","Red"], "Venue":["Blue","White"], "i20":["Red","White"], "Verna":["Black","White"], "Tucson":["Grey","White"],
+  "Swift":["Red","White"], "Baleno":["Blue","Grey"], "Brezza":["White","Silver"], "Ertiga":["White","Grey"], "Dzire":["Brown","White"],
+  "Nexon":["Blue","Grey","White"], "Harrier":["Black","White"], "Safari":["White","Blue"], "Altroz":["Gold","White"], "Punch":["Brown","White"]
+};
+
+const carPriceRanges = {
+  "Fortuner":[3300000,5100000],"Innova Crysta":[2000000,2650000],"Glanza":[660000,960000],"Hyryder":[1100000,2000000],"Camry":[4660000,4800000],
+  "3 Series":[5200000,6400000],"5 Series":[6900000,7800000],"X1":[4800000,5300000],"X5":[9700000,11300000],"iX (Electric)":[13900000,15500000],
+  "A4":[4500000,5200000],"Q3":[4850000,5250000],"Q5":[6200000,6900000],"A6":[6600000,7200000],"e-tron (Electric)":[11500000,13500000],
+  "C-Class":[5700000,6100000],"E-Class":[7600000,9000000],"GLC":[7500000,7900000],"GLE":[11000000,13500000],"S-Class":[16500000,20000000],
+  "Model S":[9000000,14000000],"Model 3":[4800000,6500000],"Model X":[12000000,17000000],"Model Y":[6000000,8500000],
+  "Creta":[1100000,2000000],"Venue":[800000,1300000],"i20":[700000,1100000],"Verna":[1050000,1750000],"Tucson":[2900000,3500000],
+  "Swift":[600000,950000],"Baleno":[680000,1100000],"Brezza":[900000,1500000],"Ertiga":[940000,1300000],"Dzire":[650000,1100000],
+  "Nexon":[825000,1480000],"Harrier":[1550000,2499000],"Safari":[1640000,2680000],"Altroz":[660000,1050000],"Punch":[600000,975000]
+};
+
+/* --------------------------
+    BRAND CHANGE
+---------------------------*/
+document.getElementById("brand").addEventListener("change", function(){
+  const brand = this.value;
+  const model = document.getElementById("model");
+  const fuel = document.getElementById("fuel");
+  const price = document.getElementById("price");
+  const color = document.getElementById("color");
+
+  model.innerHTML = '<option value="">Select Model</option>';
+  fuel.innerHTML = '<option value="">Select Fuel Type</option>';
+  color.innerHTML = '<option value="">Select Color</option>';
+
+  if (brandModels[brand]) {
+    brandModels[brand].forEach(m => model.insertAdjacentHTML('beforeend', `<option>${m}</option>`));
+  }
+
+  // Reset price slider
+  price.min = 0;
+  price.max = 0;
+  price.value = 0;
+  document.querySelector(".range-value").textContent = `Select a model`;
+});
+
+/* --------------------------
+    MODEL CHANGE
+---------------------------*/
+document.getElementById("model").addEventListener("change", function () {
+  const model = this.value;
+  const fuel = document.getElementById("fuel");
+  const priceSlider = document.getElementById("price");
+  const color = document.getElementById("color");
+
+  fuel.innerHTML = '<option value="">Select Fuel Type</option>';
+  color.innerHTML = '<option value="">Select Color</option>';
+
+  if (fuelTypes[model]) {
+    fuelTypes[model].forEach(f => fuel.insertAdjacentHTML('beforeend', `<option>${f}</option>`));
+  }
+
+  if (colors[model]) {
+    colors[model].forEach(c => color.insertAdjacentHTML('beforeend', `<option>${c}</option>`));
+  }
+
+  if (carPriceRanges[model]) {
+    const [minP, maxP] = carPriceRanges[model];
+
+    // set slider numeric min/max/value
+    priceSlider.min = Math.floor(minP);
+    priceSlider.max = Math.floor(maxP);
+    priceSlider.value = Math.floor(maxP);
+
+    document.querySelector(".range-value").textContent =
+      `Up to ₹${Number(priceSlider.value).toLocaleString()}`;
+  } else {
+    priceSlider.min = 0;
+    priceSlider.max = 0;
+    priceSlider.value = 0;
+    document.querySelector(".range-value").textContent = `Select a model`;
+  }
+});
+
+/* --------------------------
+    PRICE SLIDER LIVE UPDATE
+---------------------------*/
+document.getElementById("price").addEventListener("input", function () {
+  // ensure display uses numeric formatting
+  const numeric = Number(this.value) || 0;
+  document.querySelector(".range-value").textContent =
+    `Up to ₹${numeric.toLocaleString()}`;
+});
+
+/* --------------------------
+    SEARCH BUTTON
+---------------------------*/
+document.getElementById("searchBtn").addEventListener("click", () => {
+  const brand = document.getElementById("brand").value;
+  const model = document.getElementById("model").value;
+  const fuel = document.getElementById("fuel").value;
+  const color = document.getElementById("color").value;
+  const bodytype = document.getElementById("bodytype").value;
+  // IMPORTANT: convert slider value to Number before saving
+  const price = Number(document.getElementById("price").value);
+
+  if (!brand || !model) {
+    alert("Please select a brand and model.");
+    return;
+  }
+
+  const minP = (carPriceRanges[model] && Number(carPriceRanges[model][0])) || null;
+  const maxP = (carPriceRanges[model] && Number(carPriceRanges[model][1])) || null;
+
+  const carData = {
+    brand,
+    model,
+    fuel: fuel || null,
+    color: color || null,
+    bodytype: bodytype || null,
+    // save numbers (not strings)
+    selectedMaxPrice: Number(price),
+    minPrice: minP,
+    maxPrice: maxP
+  };
+
+  localStorage.setItem("selectedCar", JSON.stringify(carData));
+
+  // navigate to details page - must match your file name exactly
+   window.location.href = "cardetails.html"
+  
+});
+</script>
+
+</body>
+</html>
